@@ -1,0 +1,116 @@
+1 How many containers of antibiotics are currently available?
+quantityOnHand
+100
+I used the the LIKE function to see if "antibiotics" is included in the item description and then getting the quantity amount.
+
+2 Which volunteer(s), if any, have phone numbers that do not start with the number 2 and whose
+last name is not Jones. Query should retrieve names rather than ids.
+volunteerName
+Gene Lewin
+I used the NOT LIKE function with the % after the 2 to get the phone numbers where they didn't begin with 2.
+
+3 Which volunteer(s) are working on transporting tasks? Query should retrieve names rather than
+ids.
+volunteerName
+George Brewer
+
+For this I started with the volunteer table to get the name and joined with assignment to get to task so that I could get to task type and see if it was equal to 'transporting'.
+
+4 Which task(s) have yet to be assigned to any volunteers (provide task descriptions, not the
+codes)?
+taskDescription
+
+For this I joined task to assignment to get both the task description and the taskCode so I could check if the taskCode was NULL meaning that it didn't exist.
+
+5 Which type(s) of package contain some kind of bottle?
+packageTypeName
+food and water
+
+To get to the item description where I could see if the package contains bottles I needed to join package_type to package to package_contents to item.
+
+6 Which items, if any, are not in any packages? Answer should be item descriptions.
+itemDescription
+bottle of antibiotics
+bottle of aspirin
+flashlight
+pack of bandages
+
+I used a LEFT JOIN on item and package to see where the item does not exist in package contents.
+
+7 Which task(s) are assigned to volunteer(s) that live in New Jersey (NJ)? Answer should have the
+task description and not the task ids.
+taskDescription
+Prepare 20 children's packages
+Prepare 100 water packages
+Prepare 5,000 packages
+
+I got from task to the volunteer's addresses by joinging task to assign to volunteer, then used the LIKE and % functions to see if NJ was anywhere in their address.
+
+8 Which volunteers began their assignments in the first half of 2021? Answer should have the
+volunteer names and not their ids.
+volunteerName
+Joan Simmons
+Chris Jordan
+
+To get both the names of the volunteer and their start times, I joined volunteer to assignment and selected 
+
+9 Which volunteers have been assigned to tasks that include packing spam? Answer should have
+the volunteer names and not their ids.
+volunteerName
+Julie While
+Gerry Banks
+
+To get from the volunteer to the items that they pack to filter out for spam, which is in package_contents, I joined volunteer to assignment to task to package to package_contents to item. Then I used the LIKE and % function to find the spam.
+
+10 Which item(s) (if any) have a total value of exactly $100 in one package? Answer should be item
+descriptions.
+itemDescription 
+Baby formula
+
+To get the total value of each package, this would be the item value multiplied by their quantity in each package. To get this information we need to join item to package_contents.
+
+11 How many volunteers are assigned to tasks with each different status? The answer should show
+each different status and the number of volunteers sorted from highest to lowest.
+taskStatusName | volunteerCount
+open | 4
+closed | 3
+ongoing | 2
+pending | 1
+
+To get the number of volunteers in the query I used COUNT and got the distinct volunteer ids for it. To connect the volunteer to the task status 
+
+12 Which task creates the heaviest set of packages and what is the weight? Show both the
+taskCode and the weight (You should be able to do this without using any sub-queries).
+taskCode | totalWeight
+105 | 308.0
+
+To get the total weight of the packages in the task, I used the SUM calculation. Then I grouped by their code and used ORDER BY and DESC to get show the heaviest one with their code. The LIMIT 1 prints just the top 1.
+
+13 How many tasks are there that do not have a type of "packing"?
+COUNT(*)
+3
+
+For this I just counted the number of tasks that don't have 'packing' in their task type name. To get this I had to join the task and task type tables.
+
+14 Of those items that have been packed, which item (or items) were touched by fewer than 3
+volunteers? Answer should be item descriptions.
+itemDescription
+can of spam
+dried fruit
+men's contain
+sleeping bandages
+taskDescription
+women's coat
+
+For this question I needed to know the amount of volunteers assigned to each task, but the question is asking about the items, so I needed to start from there. I did this connection by joining item to package_contents to package to task to assignment. By doing these joins, I could group the selections by their item description and count how many assignments there were.
+
+15 Which packages have a total value of more than 100? Show the packageIds and their value
+sorted from lowest to highest.
+packageId | totalValue
+6 | 150.0
+2 | 151.0
+4 | 350.0
+10 | 750.0
+5 | 1420.0
+
+To answer these question I needed to add up the items in each package's values. This required a package contents to item join, and to get the packageId I started there and joined that to package_contents.
